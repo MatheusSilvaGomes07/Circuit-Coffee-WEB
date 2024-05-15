@@ -8,12 +8,14 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pedidos - Circuit Coffee</title>
+    <title>Histórico de Pedidos - Circuit Coffee</title>
 </head>
+
 <body>
+
 <nav class="navbar">
-    <h5>Pedidos</h5>
-    <a href="{% url "historico" %}"><h5>Histórico de Pedidos</h5></a>
+    <h5>Histórico de Pedidos</h5>
+    <a href="{% url "index" %}"><h5>Pedidos</h5></a>
 </nav>
 
 <table class="table">
@@ -32,14 +34,15 @@
         </tr>
     {% endfor %}
 </table>
+</table>
 
 </body>
 </html>
 
 <style>
 a:link {
-    color: black;
-    text-decoration: none; 
-    background-color: transparent;
-}
+        color: black;
+        text-decoration: none; 
+        background-color: transparent;
+}    
 </style>
