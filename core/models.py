@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Pedido(models.Model):
-    NomeCli = models.ForeignKey(User, on_delete=models.CASCADE)
+    NomeCli = models.CharField(max_length=72, null=True)
     Bebida = models.CharField(max_length=72, null=True)
     Acompanhamento = models.CharField(max_length=72)
     Valor = models.DecimalField(max_digits=10, decimal_places=2)
