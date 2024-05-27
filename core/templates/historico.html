@@ -24,6 +24,7 @@
         <th>Pedido</th>
         <th>Acompanhamento</th>
         <th>Status do pedido</th>
+        <th>Alterar Status</th> 
     </tr>
     {% for pedidos in pedido %}
         <tr>
@@ -31,6 +32,17 @@
             <td>{{ pedidos.Bebida }}</td>
             <td>{{ pedidos.Acompanhamento }}</td>
             <td>{{ pedidos.StatusPedido }}</td>
+            <td>
+                <form method="POST" action="{% url 'alterar_status' pedidos.id %}">
+                    {% csrf_token %}
+                    <select name="novo_status">
+                        <option value="" disabled selected hidden>Selecione o novo status</option>
+                        <option value="Aprovado">Aprovado</option>
+                        <option value="Aguardando pagamento">Aguardando pagamento</option>
+                    </select>
+                    <button type="submit">Alterar</button>
+                </form>
+            </td>
         </tr>
     {% endfor %}
 </table>
