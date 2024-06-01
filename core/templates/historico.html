@@ -22,14 +22,16 @@
     <tr>
         <th>Cliente</th>
         <th>Pedido</th>
+        <th>Valor do Pedido</th>
         <th>Acompanhamento</th>
         <th>Status do pedido</th>
-        <th>Alterar Status</th> 
+        <th>Alterar Status</th>
     </tr>
     {% for pedidos in pedido %}
         <tr>
             <td>{{ pedidos.NomeCli }}</td>
             <td>{{ pedidos.Bebida }}</td>
+            <td>R${{ pedidos.Valor|floatformat:2 }}</td>
             <td>{{ pedidos.Acompanhamento }}</td>
             <td>{{ pedidos.StatusPedido }}</td>
             <td>
