@@ -3,12 +3,12 @@ from django.shortcuts import render, redirect
 from .models import Pedido
 
 def index(request):
-    pedidos_aguardando_pagamento = Pedido.objects.filter(StatusPedido__in=['Aprovado'])
+    pedidos_aguardando_pagamento = Pedido.objects.filter(StatusPedido__in=['Aguardando pagamento'])
 
     return render(request, 'index.html', {'pedido': pedidos_aguardando_pagamento})
 
 def historico(request):
-    pedidos_pagos_cancelados = Pedido.objects.filter(StatusPedido__in=['Cancelado', 'Aguardando pagamento'])
+    pedidos_pagos_cancelados = Pedido.objects.filter(StatusPedido__in=['Cancelado', 'Aprovado'])
 
     return render(request, 'historico.html', {'pedido':pedidos_pagos_cancelados})
 
