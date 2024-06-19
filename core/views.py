@@ -12,7 +12,15 @@ def historico(request):
 
     return render(request, 'historico.html', {'pedido':pedidos_pagos_cancelados})
 
-# views.py
+def pagos(request):
+    pedidos_pagos = Pedido.objects.filter(StatusPedido__in=['Aprovado'])
+
+    return render(request, 'pedpagos.html', {'pedido':pedidos_pagos})
+
+def cancelados(request):
+    pedidos_cancelados = Pedido.objects.filter(StatusPedido__in=['Cancelado'])
+
+    return render(request, 'pedcancelados.html', {'pedido':pedidos_cancelados})
 
 def alterar_status(request, pedido_id):
     if request.method == 'POST':
