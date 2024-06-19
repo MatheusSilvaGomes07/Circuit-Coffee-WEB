@@ -13,3 +13,4 @@ class Pedido(models.Model):
     )
     StatusPedido = models.CharField(max_length=72, choices=STATUS, null=True)
     DataPed = models.DateField(auto_now_add=True, null=True)
+    ObsPed = models.CharField(max_length=72, null=True)
