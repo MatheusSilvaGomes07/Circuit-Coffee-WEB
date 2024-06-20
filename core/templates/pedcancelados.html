@@ -15,7 +15,7 @@
         <div class="row">
             <div class="col-md-2 sidebar">
                 <div class="logo">
-                    <img src="{% static 'img/CircuitCoffee.png' %}" alt="Circuit Coffee Logo">
+                    <img src="{% static 'img/1.svg' %}" alt="Circuit Coffee Logo">
                 </div>
                 <nav class="nav flex-column">
                     <a class="nav-link" href="{% url 'index' %}">Lista de pedidos</a>
@@ -40,7 +40,9 @@
                                 <th>Pedido</th>
                                 <th>Acompanhamento</th>
                                 <th>Valor do Pedido</th>
+                                <th>Observações do pedido</th>
                                 <th>Status do Pedido</th>
+                                <th>Modificar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,6 +52,7 @@
                                     <td>{{ pedidos.Bebida }}</td>
                                     <td>{{ pedidos.Acompanhamento }}</td>
                                     <td>R${{ pedidos.Valor|floatformat:2 }}</td>
+                                    <td>{{ pedidos.ObsPed }}</td>
                                     <td>
                                         {% if pedidos.StatusPedido == "Cancelado" %}
                                         <span class="badge badge-cancelado">Cancelado</span>
@@ -59,6 +62,18 @@
                                         <span class="badge badge-aguardando">Aguardando pagamento</span>
                                     {% endif %}
                                     </td>
+                                    <td>
+                                        <form method="POST" action="{% url 'alterar_status' pedidos.id %}">
+                                            {% csrf_token %}
+                                            <select name="novo_status" class="form-control">
+                                                <option value="" disabled selected hidden>Selecione o novo status</option>
+                                                <option value="Aprovado">Aprovado</option>
+                                                <option value="Cancelado">Cancelado</option>
+                                                <option value="Aguardando pagamento">Aguardando pagamento</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary btn-sm mt-2">Alterar</button>
+                                        </form>
+                                    </td> 
                                    
                                 </tr>
                             {% endfor %}
