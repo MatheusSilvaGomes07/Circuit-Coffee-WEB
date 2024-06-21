@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .models import Pedido
 
 def index(request):
-    pedidos_aguardando_pagamento = Pedido.objects.filter(StatusPedido__in=['Aguardando pagamento'])
+    pedidos_aguardando_pagamento = Pedido.objects.filter(StatusPedido__in=['Aguardando'])
 
     return render(request, 'index.html', {'pedido': pedidos_aguardando_pagamento})
 
@@ -29,7 +29,7 @@ def alterar_status(request, pedido_id):
             return HttpResponseBadRequest('Um novo status deve ser selecionado.')
         
         
-        status_validos = ['Aprovado', 'Cancelado', 'Aguardando pagamento']
+        status_validos = ['Aprovado', 'Cancelado', 'Aguardando']
         if novo_status not in status_validos:
             return HttpResponseBadRequest('O status selecionado não é válido.')
         

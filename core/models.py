@@ -9,7 +9,7 @@ class Pedido(models.Model):
     STATUS = (
         ('Aprovado', 'APROVADO'),
         ('Cancelado', 'CANCELADO'),
-        ('Aguardando pagamento', 'PAGAMENTO'),
+        ('Aguardando', 'PAGAMENTO'),
     )
     StatusPedido = models.CharField(max_length=72, choices=STATUS, null=True)
     DataPed = models.DateField(auto_now_add=True, null=True)
