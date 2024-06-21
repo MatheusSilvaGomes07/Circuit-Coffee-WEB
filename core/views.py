@@ -1,6 +1,7 @@
 from django.http import HttpResponseBadRequest, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pedido
+from .forms import PedidoForm
 
 def index(request):
     pedidos_aguardando_pagamento = Pedido.objects.filter(StatusPedido__in=['Aguardando'])
@@ -37,3 +38,20 @@ def alterar_status(request, pedido_id):
         pedido.StatusPedido = novo_status
         pedido.save()
     return redirect('index')
+
+def adicionar_pedido(request):
+    if request.method == 'POST':
+        form = PedidoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = PedidoForm()
+    return render(request, 'adicionar_pedido.html', {'form': form})
+
+def deletar_pedido(request, pedido_id):
+    pedido = get_object_or_404(Pedido, id=pedido_id)
+    if request.method == 'POST':
+        pedido.delete()
+        return redirect('index')
+    return render(request, 'deletar_pedido.html', {'pedido': pedido})

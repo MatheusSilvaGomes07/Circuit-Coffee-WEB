@@ -17,8 +17,8 @@
                 <div class="logo">
                     <img src="{% static 'img/1.svg' %}" alt="Circuit Coffee Logo">
                 </div>
-                <nav class="nav flex-column ">
-                    <a class="nav-link " href="{% url 'historico' %}">Historico de pedidos</a>
+                <nav class="nav flex-column">
+                    <a class="nav-link" href="{% url 'historico' %}">Histórico de pedidos</a>
                     <a class="nav-link" href="{% url 'pedpagos' %}">Pedidos pagos</a>
                     <a class="nav-link" href="{% url 'pedcancelados' %}">Pedidos cancelados</a>
                 </nav>
@@ -28,7 +28,9 @@
                     <h5 class="navbar-brand">Pedidos</h5>
                     <div class="collapse navbar-collapse">
                         <ul class="navbar-nav ml-auto">
-                            
+                            <li class="nav-item">
+                                <button class="btn btn-primary" onclick="abrirModalAdicionar()">Adicionar Pedido</button>
+                            </li>
                         </ul>
                     </div>
                 </nav>
@@ -43,27 +45,28 @@
                                 <th>Observações do pedido</th>
                                 <th>Status do Pedido</th>
                                 <th>Modificar</th>
+                                <th>Deletar</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for pedidos in pedido %}
+                            {% for pedido in pedido %}
                                 <tr>
-                                    <td>{{ pedidos.NomeCli }}</td>
-                                    <td>{{ pedidos.Bebida }}</td>
-                                    <td>{{ pedidos.Acompanhamento }}</td>
-                                    <td>R${{ pedidos.Valor|floatformat:2 }}</td>
-                                    <td>{{ pedidos.ObsPed }}</td>
+                                    <td>{{ pedido.NomeCli }}</td>
+                                    <td>{{ pedido.Bebida }}</td>
+                                    <td>{{ pedido.Acompanhamento }}</td>
+                                    <td>R${{ pedido.Valor|floatformat:2 }}</td>
+                                    <td>{{ pedido.ObsPed }}</td>
                                     <td>
-                                        {% if pedidos.StatusPedido == "Cancelado" %}
+                                        {% if pedido.StatusPedido == "Cancelado" %}
                                         <span class="badge badge-cancelado">Cancelado</span>
-                                    {% elif pedidos.StatusPedido == "Aprovado" %}
+                                    {% elif pedido.StatusPedido == "Aprovado" %}
                                         <span class="badge badge-aprovado">Aprovado</span>
-                                    {% elif pedidos.StatusPedido == "Aguardando" %}
+                                    {% elif pedido.StatusPedido == "Aguardando" %}
                                         <span class="badge badge-aguardando">Aguardando pagamento</span>
                                     {% endif %}
                                     </td>
                                     <td>
-                                        <form method="POST" action="{% url 'alterar_status' pedidos.id %}">
+                                        <form method="POST" action="{% url 'alterar_status' pedido.id %}">
                                             {% csrf_token %}
                                             <select name="novo_status" class="form-control">
                                                 <option value="" disabled selected hidden>Selecione o novo status</option>
@@ -74,6 +77,9 @@
                                             <button type="submit" class="btn btn-primary btn-sm mt-2">Alterar</button>
                                         </form>
                                     </td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm" onclick="abrirModalDeletar({{ pedido.id }})">Deletar</button>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -82,5 +88,68 @@
             </div>
         </div>
     </div>
+
+    <!-- Adicionar Pedido Modal -->
+    <div class="modal fade" id="adicionarPedidoModal" tabindex="-1" aria-labelledby="adicionarPedidoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST" action="{% url 'adicionar_pedido' %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="adicionarPedidoModalLabel">Adicionar Pedido</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% include 'form.html' with form=form %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-primary">Salvar Pedido</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deletar Pedido Modal -->
+    <div class="modal fade" id="deletarPedidoModal" tabindex="-1" aria-labelledby="deletarPedidoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deletarPedidoModalLabel">Deletar Pedido</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Tem certeza que deseja deletar este pedido?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger">Deletar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function abrirModalAdicionar() {
+            var adicionarModal = new bootstrap.Modal(document.getElementById('adicionarPedidoModal'));
+            adicionarModal.show();
+        }
+
+        function abrirModalDeletar(pedidoId) {
+            var deletarForm = document.querySelector('#deletarPedidoModal form');
+            deletarForm.action = "{% url 'deletar_pedido' 0 %}".replace('/0/', '/' + pedidoId + '/');
+            var deletarModal = new bootstrap.Modal(document.getElementById('deletarPedidoModal'));
+            deletarModal.show();
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7ie5+d5eO5XzzIKpy7cr2Kr5j5gL5LPD/Al" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gyb1puFhKYFR9+MMG7nL+moN5syCBOB+Fhpq/s/iH1Mu65Qiz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+E/gmka7EqK7FoXskpp8xuj/4anqa" crossorigin="anonymous"></script>
 </body>
 </html>
+
