@@ -13,14 +13,17 @@ body {
 }
 
 .sidebar {
-    background-color: #4789A2; /* Ajustado para um tom de azul escuro similar ao da imagem */
+    background-color: #488ba3;
     color: white;
     width: 170px;
     padding-top: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh; /* Garante que a sidebar ocupe pelo menos a altura total da tela */
+    position: fixed; /* Faz com que a sidebar siga o scroll do mouse */
+    top: 0;
+    bottom: 0;
 }
 
 .sidebar .logo img {
@@ -49,6 +52,13 @@ body {
     padding: 20px;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 170px;
+}
+
+.nav {
+    flex-grow: 1; /* Faz com que a nav ocupe o espaço restante */
 }
 
 .navbar {
@@ -113,4 +123,107 @@ th {
 .badge-aguardando {
     background-color: #dabc37;
     color: #ffffff;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+}
+
+.logout-container {
+    margin-top: auto; /* Move o botão de logout para o fundo da sidebar */
+    padding: 20px; /* Espaçamento opcional */
+}
+
+
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+}
+
+.btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #4789A2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #1a242f;
+}
+
+.btn.btn-danger{
+    display: inline-block;
+    background: rgb(187, 59, 59);
+}
+
+
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* 5% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 600px; /* Set a maximum width */
+    max-height: 80vh; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scroll if needed */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.navbar-brand {
+    margin-right: 20px; /* Ajuste este valor conforme necessário */
+}
+
+#adicionar-pedido-btn {
+    margin-left: 20px; /* Ajuste este valor conforme necessário */
 }
