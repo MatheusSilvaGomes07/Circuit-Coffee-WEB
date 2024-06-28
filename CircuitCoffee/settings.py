@@ -30,11 +30,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'corsheaders',
     'core',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'corsheaders',
+    
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -63,6 +64,8 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 
+ACCOUNT_FORMS = {'login': 'core.forms.CustomLoginForm'}
+
 ROOT_URLCONF = 'CircuitCoffee.urls'
 
 
@@ -70,7 +73,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'core', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

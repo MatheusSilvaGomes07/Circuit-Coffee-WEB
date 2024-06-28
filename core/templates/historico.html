@@ -32,6 +32,7 @@
             <div class="col-md-10 content">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">
                     <h5 class="navbar-brand">Historico</h5>
+                    <button id="adicionar-pedido-btn" class="btn btn-primary sm-mt 2">Adicionar Pedido</button>
                     <div class="collapse navbar-collapse">
                         <ul class="navbar-nav ml-auto">
                             <li class="nav-item">
@@ -50,7 +51,7 @@
                                 <th>Observações do pedido</th>
                                 <th>Realizado em</th>
                                 <th>Status do Pedido</th>
-                                <th>Modificar</th>
+                                <th>Modificar/Deletar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -82,6 +83,10 @@
                                             </select>
                                             <button type="submit" class="btn btn-primary btn-sm mt-2">Alterar</button>
                                         </form>
+                                        <form id="form-deletar-{{ pedidos.id }}" method="POST">
+                                            {% csrf_token %}
+                                            <button type="button" class="btn btn-danger btn-sm mt-2" onclick="confirmarDelecao({{ pedidos.id }})">Deletar</button>
+                                        </form>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -91,5 +96,109 @@
             </div>
         </div>
     </div>
+    <!-- Modal para adicionar pedido -->
+    <div id="adicionar-pedido-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Adicionar Pedido</h2>
+            <form id="adicionar-pedido-form" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_NomeCli">Nome do Cliente:</label>
+                    <input type="text" id="id_NomeCli" name="NomeCli" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_Bebida">Bebida:</label>
+                    <input type="text" id="id_Bebida" name="Bebida" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_Acompanhamento">Acompanhamento:</label>
+                    <input type="text" id="id_Acompanhamento" name="Acompanhamento" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_Valor">Valor:</label>
+                    <input type="number" id="id_Valor" name="Valor" class="form-control" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_StatusPedido">Status do Pedido:</label>
+                    <select id="id_StatusPedido" name="StatusPedido" class="form-control" required>
+                        <option value="" disabled selected hidden>Selecione um status</option>
+                        <option value="Aprovado">Aprovado</option>
+                        <option value="Cancelado">Cancelado</option>
+                        <option value="Aguardando">Aguardando pagamento</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="id_ObsPed">Observações do Pedido:</label>
+                    <input type="text" id="id_ObsPed" name="ObsPed" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Adicionar Pedido</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"</script>
+
+    <!-- Script para modal e AJAX -->
+    <script>
+        // Script para abrir e fechar a modal
+        var modal = document.getElementById('adicionar-pedido-modal');
+        var btn = document.getElementById('adicionar-pedido-btn');
+        var span = document.getElementsByClassName('close')[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // AJAX para submissão do formulário
+        var form = document.getElementById('adicionar-pedido-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(form);
+            fetch('/adicionar/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    modal.style.display = "none";
+                    window.location.reload(); // Recarrega a página após adicionar o pedido
+                } else {
+                    alert('Erro ao adicionar pedido:\n' + JSON.stringify(data.errors));
+                }
+            })
+            .catch(error => {
+                console.error('Erro na requisição AJAX:', error);
+                alert('Erro na requisição AJAX');
+            });
+        });
+
+        function confirmarDelecao(pedidoId) {
+            var form = document.getElementById('form-deletar-' + pedidoId);
+        
+            if (form) {
+                if (confirm('Tem certeza que deseja deletar este pedido?')) {
+                    form.action = '/deletar/' + pedidoId + '/';
+                    form.submit();
+                }
+            } else {
+                console.error('Formulário não encontrado para deletar o pedido ID:', pedidoId);
+            }
+            
+        }
+    </script>
 </body>
 </html>
