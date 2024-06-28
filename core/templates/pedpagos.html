@@ -48,6 +48,7 @@
                                 <th>Acompanhamento</th>
                                 <th>Valor do Pedido</th>
                                 <th>Observações do pedido</th>
+                                <th>Realizado em</th>
                                 <th>Status do Pedido</th>
                                 <th>Modificar</th>
                             </tr>
@@ -60,6 +61,7 @@
                                     <td>{{ pedidos.Acompanhamento }}</td>
                                     <td>R${{ pedidos.Valor|floatformat:2 }}</td>
                                     <td>{{ pedidos.ObsPed }}</td>
+                                    <td>{{ pedidos.DataPed }}</td>
                                     <td>
                                         {% if pedidos.StatusPedido == "Cancelado" %}
                                         <span class="badge badge-cancelado">Cancelado</span>
